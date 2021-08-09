@@ -1,21 +1,101 @@
-import { StatusBar } from "expo-status-bar";
+import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Text } from "react-native";
+import { ThemeProvider } from "styled-components/native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { SafeArea } from "./src/components/utils/safe-area.component";
+import { theme } from "./src/infrastructure/theme";
+
+const Tab = createBottomTabNavigator();
+
+const Transactions = () => (
+  <SafeArea>
+    <Text>Transactions</Text>
+  </SafeArea>
+);
+const AddScreen = () => (
+  <SafeArea>
+    <Text>Add transaction</Text>
+  </SafeArea>
+);
+const ProfileScreen = () => (
+  <SafeArea>
+    <Text>Profile</Text>
+  </SafeArea>
+);
+
+const TAB_ICON = {
+  Add: {
+    name: "plus-circle",
+    library: "MaterialCommunityIcons",
+  },
+  Transactions: {
+    name: "account-balance",
+    library: "MaterialIcons",
+  },
+  Profile: {
+    name: "account-circle",
+    library: "MaterialCommunityIcons",
+  },
+};
+
+const tabBarIcon =
+  (routeName) =>
+  ({ size, color }) => {
+    let iconName;
+    let library;
+
+    if (routeName === "Add") {
+      iconName = TAB_ICON.Add.name;
+      library = TAB_ICON.Add.library;
+    } else if (routeName === "Transactions") {
+      iconName = TAB_ICON.Transactions.name;
+      library = TAB_ICON.Transactions.library;
+    } else if (routeName === "Profile") {
+      iconName = TAB_ICON.Profile.name;
+      library = TAB_ICON.Profile.library;
+    }
+
+    switch (library) {
+      case "MaterialIcons":
+        return <MaterialIcons name={iconName} size={size} color={color} />;
+
+      default:
+        return (
+          <MaterialCommunityIcons name={iconName} size={size} color={color} />
+        );
+    }
+  };
+
+const createScreenOptions = ({ route }) => {
+  const routeName = route.name;
+  return {
+    headerShown: false,
+    tabBarIcon: tabBarIcon(routeName),
+  };
+};
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <ThemeProvider theme={theme}>
+        <NavigationContainer>
+          <Tab.Navigator
+            screenOptions={createScreenOptions}
+            tabBarOptions={{
+              activeTintColor: "orange",
+              inactiveTintColor: "gray",
+            }}
+          >
+            <Tab.Screen name="Transactions" component={Transactions} />
+            <Tab.Screen name="Add" component={AddScreen} />
+            <Tab.Screen name="Profile" component={ProfileScreen} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </ThemeProvider>
+      <ExpoStatusBar style="auto" />
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
