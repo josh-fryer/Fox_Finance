@@ -1,5 +1,5 @@
 {
-  "extends": "@react-native-community",
+  "extends": ["@react-native-community", "plugin:react-hooks/recommended"],
   "rules": {
     "quotes": [2, "double", { "avoidEscape": true }]
   }

@@ -8,18 +8,11 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { SafeArea } from "./src/components/utils/safe-area.component";
 import { theme } from "./src/infrastructure/theme";
 
+import { TransactionsScreen } from "./src/features/transactions/screens/transactionsScreen";
+import { AddScreen } from "./src/features/add/screens/addScreen";
+
 const Tab = createBottomTabNavigator();
 
-const Transactions = () => (
-  <SafeArea>
-    <Text>Transactions</Text>
-  </SafeArea>
-);
-const AddScreen = () => (
-  <SafeArea>
-    <Text>Add transaction</Text>
-  </SafeArea>
-);
 const ProfileScreen = () => (
   <SafeArea>
     <Text>Profile</Text>
@@ -74,6 +67,8 @@ const createScreenOptions = ({ route }) => {
   return {
     headerShown: false,
     tabBarIcon: tabBarIcon(routeName),
+    tabBarActiveTintColor: "orange",
+    tabBarInactiveTintColor: "gray",
   };
 };
 
@@ -82,14 +77,8 @@ export default function App() {
     <>
       <ThemeProvider theme={theme}>
         <NavigationContainer>
-          <Tab.Navigator
-            screenOptions={createScreenOptions}
-            tabBarOptions={{
-              activeTintColor: "orange",
-              inactiveTintColor: "gray",
-            }}
-          >
-            <Tab.Screen name="Transactions" component={Transactions} />
+          <Tab.Navigator screenOptions={createScreenOptions}>
+            <Tab.Screen name="Transactions" component={TransactionsScreen} />
             <Tab.Screen name="Add" component={AddScreen} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
           </Tab.Navigator>
