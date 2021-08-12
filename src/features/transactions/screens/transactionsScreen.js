@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FlatList } from "react-native";
 import { SafeArea } from "../../../components/utils/safe-area.component";
 import { Spacer } from "../../../components/spacer/spacer.component";
+2;
 import { TransactionComponent } from "../components/transactionComponent";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
@@ -15,12 +16,18 @@ export const TransactionsScreen = (refresh) => {
 
       if (savedTrans && JSON.parse(savedTrans).length) {
         //console.log("savedTrans: ", savedTrans);
+        // setTrans to empty array before updating fixes broken styling layout of items.
+        setTrans([]);
         setTrans(JSON.parse(savedTrans));
       }
     } catch (e) {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    loadTransactions();
+  }, []);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -37,6 +44,7 @@ export const TransactionsScreen = (refresh) => {
     <SafeArea>
       <FlatList
         data={trans}
+        extraData={trans}
         renderItem={(item) => {
           //console.log("item = ", item.item.id);
           return (

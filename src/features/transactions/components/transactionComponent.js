@@ -25,6 +25,10 @@ const Money = styled(Text)`
   padding: ${(props) => props.theme.space[1]};
   text-align: center;
   justify-content: center;
+  color: ${(props) =>
+    props.inputType === "income"
+      ? props.theme.colors.text.success
+      : props.theme.colors.text.error};
 `;
 const Title = styled(Text)`
   flex: 1;
@@ -45,7 +49,7 @@ const Date = styled(Text)`
 export const TransactionComponent = ({ item }) => {
   return (
     <TransactionItem>
-      <Money>£{item.amount}</Money>
+      <Money inputType={item.type}>£{item.amount}</Money>
       <Title>{item.description}</Title>
       <Date>{item.date}</Date>
     </TransactionItem>
