@@ -10,14 +10,9 @@ import { theme } from "./src/infrastructure/theme";
 
 import { TransactionsScreen } from "./src/features/transactions/screens/transactionsScreen";
 import { AddScreen } from "./src/features/add/screens/addScreen";
+import { ProfileScreen } from "./src/features/profile/screens/profileScreen";
 
 const Tab = createBottomTabNavigator();
-
-const ProfileScreen = () => (
-  <SafeArea>
-    <Text>Profile</Text>
-  </SafeArea>
-);
 
 const TAB_ICON = {
   Add: {

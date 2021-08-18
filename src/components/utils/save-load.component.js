@@ -33,3 +33,22 @@ const saveTransaction = async (data) => {
     console.log(e);
   }
 };
+
+export const deleteTransaction = async (id) => {
+  try {
+    // 1. get transactions list to object array.
+    // 2. find transaction.
+    // 3. remove from array.
+    // 4. save new array.
+    const savedTrans = await AsyncStorage.getItem("transactions");
+
+    if (savedTrans && JSON.parse(savedTrans).length) {
+      let parsedArr = JSON.parse(savedTrans);
+      // Filter array where id is not equal to requested id.
+      parsedArr = parsedArr.filter((item) => item.id !== id);
+      saveTransaction(parsedArr);
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};

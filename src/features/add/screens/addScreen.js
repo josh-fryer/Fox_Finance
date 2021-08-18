@@ -1,42 +1,25 @@
 /* eslint-disable no-alert */
 import React, { useState } from "react";
-import { Button, Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, Alert, Platform } from "react-native";
 import CurrencyInput from "react-native-currency-input";
 import styled from "styled-components/native";
 import { SafeArea } from "../../../components/utils/safe-area.component";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { addTransaction } from "../../../components/utils/save-load.component";
-
-const NameInput = styled.TextInput`
-  border-width: 1px;
-  margin: 20px;
-`;
-
-function formatDate(date) {
-  var d = new Date(date),
-    month = "" + (d.getMonth() + 1),
-    day = "" + d.getDate(),
-    year = d.getFullYear();
-
-  if (month.length < 2) {
-    month = "0" + month;
-  }
-  if (day.length < 2) {
-    day = "0" + day;
-  }
-
-  return [day, month, year].join("/");
-}
+import { formatDate } from "../../../infrastructure/global";
+import { Spacer } from "../../../components/spacer.component";
+import { Button } from "../../../components/custom-button";
 
 export const AddScreen = () => {
   const [number, onChangeNumber] = useState(null);
-  const [name, onChangeName] = useState("");
+  const [description, onChangeDesc] = useState("");
   const [show, setShow] = useState(false);
   const [date, setDate] = useState(new Date());
+  const [type, setType] = useState("Income");
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShow(false);
+    setShow(Platform.OS === "ios");
     setDate(currentDate);
   };
 
@@ -46,13 +29,13 @@ export const AddScreen = () => {
 
   const clearForm = () => {
     onChangeNumber(null);
-    onChangeName("");
+    onChangeDesc("");
     setDate(new Date());
   };
 
   const onSubmit = () => {
-    if (!name.trim()) {
-      alert("Please Enter Name");
+    if (!description.trim()) {
+      alert("Please enter a description");
       return;
     }
 
@@ -65,31 +48,43 @@ export const AddScreen = () => {
     }
 
     /*do something here to save data */
-    addTransaction(name, formatDate(date), number, "income");
+    addTransaction(description, formatDate(date), number, type.toLowerCase());
     clearForm();
-    alert("Succesfully Added!");
-    /* reset form here. return to transactions screen */
+    Alert.alert("Success", "Added transaction!");
+    /*  return to transactions screen */
   };
 
   return (
     <SafeArea>
-      <CurrencyInput
-        value={number}
-        prefix="£"
-        delimiter=","
-        separator="."
-        precision={2}
-        placeholder="£00.00"
-        keyboardType="numeric"
-        onChangeValue={onChangeNumber}
-        style={styles.currencyInput}
-      />
-      <NameInput
-        value={name}
-        placeholder="enter description"
-        onChangeText={onChangeName}
-      />
-      <View>
+      <Spacer position={"top"} size={"xxl"} />
+      <Row>
+        <Label>Amount </Label>
+        <MyCurrencyInput
+          value={number}
+          prefix="£"
+          delimiter=","
+          separator="."
+          precision={2}
+          placeholder="£00.00"
+          keyboardType="numeric"
+          onChangeValue={onChangeNumber}
+        />
+      </Row>
+      <Spacer position={"top"} size={"large"} />
+      <Row>
+        <Label>Description </Label>
+        <DescInput
+          value={description}
+          placeholder="Enter description"
+          onChangeText={onChangeDesc}
+          multiline={false}
+        />
+      </Row>
+
+      <Spacer position={"top"} size={"large"} />
+
+      <View style={{ alignItems: "center" }}>
+        <Label>Date of transaction</Label>
         <View>
           <Button onPress={showDatepicker} title={formatDate(date)} />
         </View>
@@ -97,23 +92,60 @@ export const AddScreen = () => {
           <DateTimePicker
             testID="dateTimePicker"
             value={date}
-            mode={date}
+            mode="date"
             display="default"
             onChange={onChange}
+            style={{ width: "70%" }}
           />
         )}
+        <Spacer position={"top"} size={"large"} />
+        <Label>Income or Expense</Label>
+        <Button
+          title={type}
+          onPress={() => {
+            if (type === "Income") {
+              setType("Expense");
+            } else {
+              setType("Income");
+            }
+          }}
+        />
+        <Spacer position={"top"} size={"xxl"} />
+        <Button fontSize={"title"} title="SUBMIT" onPress={onSubmit} />
       </View>
-      <Button title="Income" />
-      <Text>Or</Text>
-      <Button title="Expense" />
-      <Button title="Submit" onPress={onSubmit} />
     </SafeArea>
   );
 };
 
-const styles = StyleSheet.create({
-  currencyInput: {
-    margin: 20,
-    borderWidth: 1,
-  },
-});
+// -------- STYLES ---------
+const Row = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-left: 24px;
+`;
+
+const DescInput = styled.TextInput`
+  border-width: 1px;
+  margin-left: 10px;
+  border-radius: 3px;
+  padding: 2px;
+  min-width: 160px;
+  max-width: 222px;
+  font-size: ${(props) => props.theme.fontSizes.body};
+  background-color: white;
+`;
+
+const Label = styled.Text`
+  font-weight: bold;
+  font-size: ${(props) => props.theme.fontSizes.title};
+`;
+
+const MyCurrencyInput = styled(CurrencyInput)`
+  min-width: 160px;
+  padding: 2px;
+  border-width: 1px;
+  border-radius: 3px;
+  margin-left: 18px;
+  font-size: ${(props) => props.theme.fontSizes.title};
+  background-color: white;
+`;

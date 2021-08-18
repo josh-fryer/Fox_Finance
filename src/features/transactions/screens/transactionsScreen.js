@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { FlatList } from "react-native";
+import { FlatList, Text, Alert } from "react-native";
 import { SafeArea } from "../../../components/utils/safe-area.component";
-import { Spacer } from "../../../components/spacer/spacer.component";
-2;
+import { Spacer } from "../../../components/spacer.component";
 import { TransactionComponent } from "../components/transactionComponent";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
+import styled from "styled-components/native";
+import { formatDate, addXP } from "../../../infrastructure/global";
 
-export const TransactionsScreen = (refresh) => {
+export const TransactionsScreen = () => {
   const [trans, setTrans] = useState([]);
 
   const loadTransactions = async () => {
     try {
       const savedTrans = await AsyncStorage.getItem("transactions");
-
+      //console.log("savedTrans: ", savedTrans);
       if (savedTrans && JSON.parse(savedTrans).length) {
-        //console.log("savedTrans: ", savedTrans);
         // setTrans to empty array before updating fixes broken styling layout of items.
         setTrans([]);
         setTrans(JSON.parse(savedTrans));
@@ -25,18 +25,43 @@ export const TransactionsScreen = (refresh) => {
     }
   };
 
+  const checkXPReward = async () => {
+    // get todays date. use formatted date as key to find whether it exists in storage
+    // dateRward obj = key: dateReward, value: {date: Date() };
+    // if (date.Now !== stored date) then setItem to todays date and add xp points.
+    const today = formatDate(Date.now());
+
+    try {
+      const val = await AsyncStorage.getItem("dateReward");
+
+      if (val !== null && val !== "") {
+        if (today !== val) {
+          await AsyncStorage.setItem("dateReward", today);
+          addXP(0.5);
+          console.log("awarded xp for dateReward");
+          Alert.alert(
+            "Daily Reward Earned!",
+            "Return every day to earn points to level up"
+          );
+        }
+      } else {
+        await AsyncStorage.setItem("dateReward", today);
+        console.log("inital set dateReward");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
-    loadTransactions();
+    checkXPReward();
   }, []);
 
   useFocusEffect(
     React.useCallback(() => {
       // Do something when the screen is focused
       loadTransactions();
-      return () => {
-        // Do something when the screen is unfocused
-        // Useful for cleanup functions
-      };
+      return () => {};
     }, [])
   );
 
@@ -44,17 +69,24 @@ export const TransactionsScreen = (refresh) => {
     <SafeArea>
       <FlatList
         data={trans}
-        extraData={trans}
         renderItem={(item) => {
           //console.log("item = ", item.item.id);
-          return (
-            <Spacer position="bottom" size="large">
-              <TransactionComponent item={item.item} />
-            </Spacer>
-          );
+          return <TransactionComponent item={item.item} />;
         }}
         keyExtractor={(item) => item.id}
+        ListEmptyComponent={
+          <EmptyListItem>
+            Added transactions will appear here. Try and add one in the "Add"
+            tab below.
+          </EmptyListItem>
+        }
       />
     </SafeArea>
   );
 };
+
+const EmptyListItem = styled.Text`
+  font-size: ${(props) => props.theme.fontSizes.title};
+  text-align: center;
+  padding-top: 50px;
+`;
