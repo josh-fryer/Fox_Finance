@@ -10,6 +10,7 @@ import { formatDate, addXP } from "../../../infrastructure/global";
 
 export const TransactionsScreen = () => {
   const [trans, setTrans] = useState([]);
+  const [change, setChange] = useState(false);
 
   const loadTransactions = async () => {
     try {
@@ -71,7 +72,7 @@ export const TransactionsScreen = () => {
         data={trans}
         renderItem={(item) => {
           //console.log("item = ", item.item.id);
-          return <TransactionComponent item={item.item} />;
+          return <TransactionComponent item={item.item} onChange={setChange} />;
         }}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={
@@ -80,6 +81,7 @@ export const TransactionsScreen = () => {
             tab below.
           </EmptyListItem>
         }
+        extraData={change}
       />
     </SafeArea>
   );

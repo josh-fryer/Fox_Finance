@@ -19,6 +19,7 @@ export const TransactionComponent = ({ item }) => {
   const deleteItem = () => {
     //deleteTransaction(item.id);
     setDeleted(true);
+    this.props.onChange();
   };
 
   const content = (
