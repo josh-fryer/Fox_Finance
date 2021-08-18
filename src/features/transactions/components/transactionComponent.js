@@ -6,7 +6,7 @@ import { deleteTransaction } from "../../../components/utils/save-load.component
 import { Spacer } from "../../../components/spacer.component";
 import { Button } from "../../../components/custom-button";
 
-export const TransactionComponent = ({ item, onChange}) => {
+export const TransactionComponent = ({ item, onChange }) => {
   const [showDelete, setShowDelete] = useState(false);
   const [deleted, setDeleted] = useState(false);
 
@@ -19,12 +19,7 @@ export const TransactionComponent = ({ item, onChange}) => {
   const deleteItem = () => {
     //deleteTransaction(item.id);
     setDeleted(true);
-    handleChange();
   };
-
-  const handleChange = useCallback(event => {
-    onChange(event.target.value)
-  }, [onChange])
 
   const content = (
     <>
