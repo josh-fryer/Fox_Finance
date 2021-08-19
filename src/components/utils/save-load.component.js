@@ -45,8 +45,10 @@ export const deleteTransaction = async (id) => {
     if (savedTrans && JSON.parse(savedTrans).length) {
       let parsedArr = JSON.parse(savedTrans);
       // Filter array where id is not equal to requested id.
+
       parsedArr = parsedArr.filter((item) => item.id !== id);
-      saveTransaction(parsedArr);
+      console.log("arr after filter = ", parsedArr);
+      await saveTransaction(parsedArr);
     }
   } catch (e) {
     console.log(e);

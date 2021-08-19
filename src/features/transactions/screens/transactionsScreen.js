@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FlatList, Text, Alert } from "react-native";
 import { SafeArea } from "../../../components/utils/safe-area.component";
-import { Spacer } from "../../../components/spacer.component";
 import { TransactionComponent } from "../components/transactionComponent";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
@@ -10,7 +9,6 @@ import { formatDate, addXP } from "../../../infrastructure/global";
 
 export const TransactionsScreen = () => {
   const [trans, setTrans] = useState([]);
-  const [change, setChange] = useState(false);
 
   const loadTransactions = async () => {
     try {
@@ -56,6 +54,7 @@ export const TransactionsScreen = () => {
 
   useEffect(() => {
     checkXPReward();
+    loadTransactions();
   }, []);
 
   useFocusEffect(
@@ -66,13 +65,19 @@ export const TransactionsScreen = () => {
     }, [])
   );
 
+  //console.log(trans);
+
   return (
     <SafeArea>
       <FlatList
         data={trans}
         renderItem={(item) => {
-          //console.log("item = ", item.item.id);
-          return <TransactionComponent item={item.item} onChange={setChange} />;
+          return (
+            <TransactionComponent
+              item={item.item}
+              setTrans={() => loadTransactions()}
+            />
+          );
         }}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={
@@ -81,7 +86,6 @@ export const TransactionsScreen = () => {
             tab below.
           </EmptyListItem>
         }
-        extraData={change}
       />
     </SafeArea>
   );

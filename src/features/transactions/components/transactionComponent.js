@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { formatNumber } from "react-native-currency-input";
@@ -6,9 +6,11 @@ import { deleteTransaction } from "../../../components/utils/save-load.component
 import { Spacer } from "../../../components/spacer.component";
 import { Button } from "../../../components/custom-button";
 
-export const TransactionComponent = ({ item, onChange }) => {
+export const TransactionComponent = ({ item, ...props }) => {
   const [showDelete, setShowDelete] = useState(false);
   const [deleted, setDeleted] = useState(false);
+
+  //console.log(props);
 
   let prefix = "";
 
@@ -16,9 +18,10 @@ export const TransactionComponent = ({ item, onChange }) => {
     prefix = "- ";
   }
 
-  const deleteItem = () => {
-    //deleteTransaction(item.id);
+  const deleteItem = async () => {
+    await deleteTransaction(item.id);
     setDeleted(true);
+    props.setTrans(); // fires loadTransactions()
   };
 
   const content = (
