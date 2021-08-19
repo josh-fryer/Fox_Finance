@@ -1,16 +1,14 @@
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
-import React from "react";
-import { Text } from "react-native";
+import React, { useEffect } from "react";
 import { ThemeProvider } from "styled-components/native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { SafeArea } from "./src/components/utils/safe-area.component";
 import { theme } from "./src/infrastructure/theme";
-
 import { TransactionsScreen } from "./src/features/transactions/screens/transactionsScreen";
 import { AddScreen } from "./src/features/add/screens/addScreen";
 import { ProfileScreen } from "./src/features/profile/screens/profileScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Tab = createBottomTabNavigator();
 
@@ -67,7 +65,18 @@ const createScreenOptions = ({ route }) => {
   };
 };
 
+const clearAll = async () => {
+  try {
+    await AsyncStorage.clear();
+  } catch (e) {
+    // clear error
+  }
+  await console.log("Done.");
+};
+
 export default function App() {
+  //clearAll();
+
   return (
     <>
       <ThemeProvider theme={theme}>

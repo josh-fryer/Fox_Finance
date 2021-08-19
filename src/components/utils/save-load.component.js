@@ -1,5 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const getRndInteger = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 export const addTransaction = async (description, date, amount, type) => {
   var parsed = [];
   try {
@@ -14,10 +18,13 @@ export const addTransaction = async (description, date, amount, type) => {
 
   // default id is nextID = 1
   let nextID = "1";
-  //console.log("nextID = ", nextID);
+
   //console.log("parsed = " + parsed);
   if (parsed.length >= 1) {
-    nextID = (parsed.length + 1).toString();
+    nextID =
+      (parsed.length + 1).toString() +
+      "-" +
+      getRndInteger(1000, 9999).toString();
   }
 
   let newTrans = { id: nextID, description, date, amount, type };
