@@ -1,5 +1,5 @@
 # Fox Finance
 Fox the transaction tracker app. 
-Made for a MSc dissertation research project.
+Made for an MSc dissertation research project.
 ## Install
 Run `yarn`
