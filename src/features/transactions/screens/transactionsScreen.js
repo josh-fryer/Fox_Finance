@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, Text, Alert } from "react-native";
+import { FlatList, Alert } from "react-native";
 import { SafeArea } from "../../../components/utils/safe-area.component";
 import { TransactionComponent } from "../components/transactionComponent";
 import AsyncStorage from "@react-native-async-storage/async-storage";

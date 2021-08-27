@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { FlatList, View, Text } from "react-native";
+import React, { useState } from "react";
+import { View, Text } from "react-native";
 import { ProgressBar } from "react-native-paper";
 import { SafeArea } from "../../../components/utils/safe-area.component";
 import { Spacer } from "../../../components/spacer.component";
@@ -25,7 +25,6 @@ const RankBG = styled.View`
   padding-right: 10px;
   background-color: #ffd700;
 `;
-
 const Rank = styled(Text)`
   text-align: center;
   justify-content: center;
@@ -37,16 +36,6 @@ const ProgressText = styled(Text)`
   font-weight: bold;
   margin-left: 10px;
 `;
-
-// status is if in progress or completed. 1 = complete, 0 = in-progress.
-const goalsArr = [
-  {
-    key: 1,
-    status: 0,
-    title: "Add your first transaction",
-    xp: 2,
-  },
-];
 
 export const ProfileScreen = () => {
   const [rank, setRank] = useState("1");

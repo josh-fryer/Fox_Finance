@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity, Dimensions } from "react-native";
+import { TouchableOpacity, Dimensions } from "react-native";
 import styled from "styled-components/native";
 
 const width = Dimensions.get("window").width;

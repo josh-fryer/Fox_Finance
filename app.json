@@ -5,7 +5,7 @@
     "slug": "Fox",
     "version": "0.0.1",
     "orientation": "portrait",
-    "icon": "./assets/fox-icon-png-8.jpg",
+    "icon": "./assets/fox.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -25,7 +25,7 @@
       }
     },
     "web": {
-      "favicon": "./assets/fox-icon-png-8.jpg"
+      "favicon": "./assets/fox.png"
     }
   }
 }

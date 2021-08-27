@@ -1,6 +1,6 @@
 /* eslint-disable no-alert */
 import React, { useState } from "react";
-import { Text, StyleSheet, View, Alert, Platform } from "react-native";
+import { View, Alert, Platform } from "react-native";
 import CurrencyInput from "react-native-currency-input";
 import styled from "styled-components/native";
 import { SafeArea } from "../../../components/utils/safe-area.component";

@@ -36,7 +36,6 @@ export const getRank = async () => {
     const val = await AsyncStorage.getItem("userRank");
 
     if (val !== null) {
-      console.log("getRank = ", val);
       const result = val;
       return result;
     } else {
@@ -59,7 +58,6 @@ const nextRank = async (val) => {
   //console.log("nextRank getRank = ", await getRank());
   // # Await converts promise to useable var.
   const rank = await getRank();
-  //console.log("nextRank rank type = ", typeof rank);
   const newRank = parseInt(rank, 10) + val;
   console.log("newRank is " + newRank);
   setRank(newRank);
@@ -67,9 +65,8 @@ const nextRank = async (val) => {
 
 export const addXP = async (val) => {
   let userXP = await getXP(); // get float
-  console.log("userXP from get = ", userXP);
   let newXPTotal = userXP + val;
-  console.log("new XP total = ", newXPTotal);
+
   // reached next level
   if (newXPTotal >= 1) {
     await nextRank(Math.floor(newXPTotal));
